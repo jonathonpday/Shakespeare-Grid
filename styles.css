@@ -7,8 +7,107 @@ body {
   color: #151412;
 }
 
+/* 
+Add grid to container element - default is a block but can use inline-grid as well.
+Grid Lines go horizontally and vertically - a grid track is any space between lines (can be column or row).
+Inside a track are cells - intersection of row and column.
+We specify the track lists for columns and rows with:
+- grid-template-columns;
+- grid-template-rows;
+
+In our grid we want three columns and to save space we use the repeat function: 
+
+grid-template-columns repeat(2, minmax(auto, 1fr)) 250px; - this produces 3 columns - 2 equal and one of 250px
+
+minmax() - two arguments - minimum and maximum range of grid track.
+
+auto - can be used for min and max values - equal to amount of room the content requires.
+
+1fr - fractions unit - represents a fraction of the available space in the grid container i.e 2fr has twice as much as 1fr of remaining space.
+
+*/
+
+/* 
+Grid template areas - two options to place content: use numbers or names.
+
+numbers - grid-column: 1/4
+This syntax states where the column starts and ends (starts col 1, ends col 4)
+Same syntax for grid-row - both implicitly contain start and end.
+
+Names - a bit easier to visualise we can set the grid with names using 'grid-template-areas':
+As shown below each string is a row in the layout and each name is a column in the row.
+You can also define cells to be empty with '.'
+
+However, after we set the grid template areas the elements then need to be assigned using the grid-area property:
+header { grid-area: header }
+article { grid-area: content }
+aside { grid-area: aside }
+.author-details { grid-area: author }
+.plays { grid-area: plays }
+footer { grid-area: footer }
+
+
+*/
+
 main {
   margin: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(auto, 1fr)) 250px;
+  grid-template-areas:
+    "header  header  header"
+    "content content author"
+    "content content aside "
+    "plays      .    aside "
+    "footer  footer footer ";
+  gap: 20px;
+}
+
+/* 
+If we want space between the grid areas we can use gap.
+Gap can take 2 values the first for row-gap, the second for column-gap or one which applies to both.
+In our example we add a 20px gap to both above: 
+
+*/
+
+/* 
+Currently on larger screens much of the content area is unfilled.
+We can use media queries to correct this:
+Below when the screen is at 955px the columns are made even and the areas are reconfigured to utilise the space
+*/
+
+@media (min-width: 955px) {
+  main {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas:
+      "header header header"
+      "content author aside"
+      "content plays  aside"
+      "footer footer footer";
+  }
+}
+
+header {
+  grid-area: header;
+}
+
+article {
+  grid-area: content;
+}
+
+aside {
+  grid-area: aside;
+}
+
+.author-details {
+  grid-area: author;
+}
+
+.plays {
+  grid-area: plays;
+}
+
+footer {
+  grid-area: footer;
 }
 
 img {
@@ -16,10 +115,15 @@ img {
   margin: 12px 12px 12px 0;
 }
 
-main > * {
+/* 
+Remove as no longer required to visulaise grid
+*/
+
+/* main > * {
   border: solid 1px #bfbfbf;
   padding: 12px;
-}
+} */
+
 main > *,
 section {
   display: flow-root;
